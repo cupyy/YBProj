@@ -3,4 +3,3 @@ pandas
 lazy
 bs4
 requests
-collections

@@ -37,3 +37,8 @@ mean?)
 3.6
 ### Required external modules
 see used_modules.txt
+### Directory structure
+#### output
+directory to save crawled result
+#### lib
+directory for python lib used for yb.py
