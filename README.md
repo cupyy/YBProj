@@ -70,3 +70,21 @@ OrderedDict([('7', ['10', '619', '31', '110', '462', '12', '740', '741', '552', 
 '468', '470', '85']), ('39', ['710', '7', '34']), ('2', ['43', '72', '14']), ('45', ['718', '720']), ('37', ['409'])])
 ```
 it display available category id and corresponding sub category ids
+```
+python yb.py crawl --help
+Usage: yb.py crawl [OPTIONS]
+
+Options:
+  --cat_id TEXT          Crawl Yahoo Buy with specified category id.  if not
+                         specified, it will crawl all category ids
+  --filename TEXT        specify the filename to save crawled result.  if not
+                         specified, name "default" will be used
+  --filetype [xlsx|csv]  specify file type to save.  default to xlsx if not
+                         specified
+  -h, --help             Show this message and exit.
+```
+To simply crawl all category, simply type:
+```
+python yb.py crawl
+```
+result will be saved in output/default.xlsx 
