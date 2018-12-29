@@ -1,5 +1,9 @@
 # A crawer to get best selling products from Yahoo Buy (https://tw.buy.yahoo.com)
 
+## Purpose
+- to write a crawer to get best selling products from Yahoo Buy
+- to write a query tool that is able to perform some options on crawled result
+
 after taking time to explore the site, there is a site map (https://tw.buy.yahoo.com/help/helper.asp?p=sitemap&hpp=sitemap) 
 that we can use to  get all category (with query pattern /?z= ) and sub category ids (with query pattern /?sub=)
 
