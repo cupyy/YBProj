@@ -1,0 +1,14 @@
+{
+  "t/test_aws.py::test_init": true,
+  "t/test_datetimestr.py::test_init": true,
+  "t/test_descriptor.py::test_init": true,
+  "t/test_emailer.py::test_init": true,
+  "t/test_emailer.py::test_order": true,
+  "t/test_nparray.py::test_init": true,
+  "t/test_sqla.py::test_aliases": true,
+  "t/test_sqla.py::test_init": true,
+  "t/test_sqla.py::test_orm": true,
+  "t/test_webbrowser.py": true,
+  "t/test_webpage.py::test_do": true,
+  "t/test_webpage.py::test_init": true
+}
