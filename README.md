@@ -25,9 +25,15 @@ assume the item listed here would be highly correlated to best selling products
 the quantity the product sold, it relys on the web site to put real HOT ITEMS
 here.  
 - although for each individual item page, there is a section called 本分類熱銷榜
-(with id = 'cl-ordrank'), I didn't take it for consideration because:
-1. those are items within sub sub category.  If we take sub sub category result
+(with id = 'cl-ordrank'), I didn't take it for consideration because those are 
+items within sub sub category.  If we also take sub sub category result
 into consideration in addition to catgoery and sub category, we might get too
 many best selling products.  That might violate the meaning of best selling
 products (if too many best selling products, the what do best selling products
 mean?)
+
+## Usage (yb.py)
+### python version
+3.6
+### Required external modules
+see used_modules.txt
