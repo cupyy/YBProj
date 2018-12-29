@@ -68,27 +68,31 @@ class YahooBuy():
             url=url
         )
 
-    def get_items_info(self, cat=None, items=None, source=None):    
+    def get_items_info(self, cat=None, sub=None, items=None, source=None):    
         rs = []
         for item in items:
             if not item.is_item:
                 continue
 
             item_info = self.gen_item_info(
-                cat=cat, item=item, source=source
+                cat=cat, item=item, source=source, sub=sub,
             )
             rs.append(item_info)
         return rs    
 
 
-    def gen_item_info(self, cat=None, item=None, source=None):    
+    def gen_item_info(self, cat=None, item=None, source=None, sub=None):    
+        if sub is not None:
+            sub_title = sub.title
+        else:
+            sub_title = item.title
         return OrderedDict({
             'category_id': cat.id,
             'category': cat.title,
-            'sub_category': item.title,
+            'sub_category': sub_title,
             'product_name': item.name,
             'price': item.price,
-            'source': source
+            #'source': source
         })
 
 
@@ -107,7 +111,7 @@ class YahooBuy():
                 print ('process sub category {} hot item'.format(sub_id))
                 sub = self.get_sub(sub_id)
                 rs += self.get_items_info(
-                        cat=cat, items=sub.hot_items, source='sub_category')
+                        cat=cat, items=sub.hot_items, source='sub_category', sub=sub)
 
         return rs        
 

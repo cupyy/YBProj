@@ -1,7 +1,4 @@
 from lazy import lazy
-import re
-import numpy as np
-import pandas as pd
 from bs4 import BeautifulSoup as BS
 import requests
 
@@ -9,6 +6,9 @@ def encode_str(string=''):
     return string.encode('utf-8', 'ignore').decode('utf-8')
 
 class WebPage():
+    '''
+    wrapper for requests and BeautifulSoup module for eazy access
+    '''
     def __init__(self, **kwargs):
         url = kwargs.get('url', None)
         self.url = encode_str(url)
@@ -28,11 +28,9 @@ class WebPage():
         #return None if type(rs) is str else rs
         return rs
         
-        
 
     @lazy
     def html(self) :
-        #return self.requests.get(self.url).text
         return self.res.text if type(self.res) is not str else self.res
 
     @lazy

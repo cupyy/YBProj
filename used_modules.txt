@@ -1,0 +1,7 @@
+python 3.6
+click
+pandas
+lazy
+bs4
+requests
+collections

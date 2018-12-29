@@ -2,6 +2,9 @@ from lib.WebPage import Base as WBase
 from lazy import lazy
 
 class Base(WBase):
+    '''
+    Yahoo Buy web page base module
+    '''
     base_url = 'https://tw.buy.yahoo.com'
     def __init__(self, **kwargs):
         self.sub_url = kwargs.get('sub_url', None)
@@ -9,10 +12,18 @@ class Base(WBase):
             kwargs['url'] = '{}/{}'.format(self.base_url, self.sub_url)
 
         super().__init__(**kwargs)
+        ########################################################################
+        # various id/class to scrape content from web page
+        # menucat_id: menucat content id
+        # menucat_title_class: class of title in menucat
+        # hotrank_id: id used to identify hotrank content
+        # hotitem_id_keyword: id keyword used to search hot item
+        ########################################################################
         self.menucat_id = kwargs.get('menucat_id', 'cl-menucate')
         self.menucat_title_class = kwargs.get('menucat_title_class', 'title')
         self.hotrank_id = kwargs.get('hotrank_id', 'cl-hotrank')
         self.hotitem_id_keyword = kwargs.get('hotitem_id_keyword', 'rank')
+        ########################################################################
 
 
     @lazy

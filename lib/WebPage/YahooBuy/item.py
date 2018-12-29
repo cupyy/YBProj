@@ -3,8 +3,19 @@ from lazy import lazy
 from collections import OrderedDict
 
 class Item(Base):
+    '''
+    web page object for hot item
+    '''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        ########################################################################
+        # various id/class used to scrape content from hot item
+        # mainitem_id: id to identify main item area
+        # spec_class: class to identify item spec
+        # name_class: class to identify product name
+        # price_tag: tag to identif price info area
+        # price_class: class to identify price info
+        ########################################################################
         self.mainitem_id = kwargs.get('mainitem_id', 'cl-mainitem')
         self.spec_class = kwargs.get('spec_class', 'item-spec')
         self.name_class = kwargs.get('name_class', 'title')

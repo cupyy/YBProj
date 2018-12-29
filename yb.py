@@ -1,5 +1,3 @@
-import os
-import sys
 import click
 import pandas as pd
 from lib.yahoobuy import YahooBuy
@@ -8,11 +6,6 @@ from lib.yahoobuy import YahooBuy
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 yb = YahooBuy()
-
-
-
-
-
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(version='1.0.0')
@@ -23,8 +16,17 @@ def main():
 @main.command()
 #@click.option('--all', is_flag=True, help='sync all')
 def show_category_mapping():
+    rs = []
     mapping = yb.mapping
     print(mapping)
+#     for cat_id, sub_ids in mapping.items():
+#         for sub_id in sub_ids:
+#             rs.append({
+#                 'category_id': cat_id,
+#                 'sub_category_id': sub_id
+#             })
+# 
+#     print(pd.DataFrame(rs))
 
 @main.command()
 @click.option('--cat_id', default=None, help='Crawl Yahoo Buy with specified \
@@ -33,13 +35,20 @@ category id.  if not specified, it will crawl all category ids')
 crawled result.  if not specified, name "default" will be used')
 @click.option('--filetype', default='xlsx', type=click.Choice(['xlsx', 'csv']), 
     help='specify file type to save.  default to xlsx if not specified') 
+
 def crawl(cat_id, filename, filetype):
-    rs = yb.crawl(cat_ids=[cat_id])
+    cat_ids = [ cat_id ]
+    if cat_id is None:
+        cat_ids = None
+    rs = yb.crawl(cat_ids=cat_ids)
     df = pd.DataFrame(rs)
-    if filetype == 'xlxs':
+    print('writting result to output/{}.{}'.format(filename, filetype))
+    if filetype == 'xlsx':
         df.to_excel('output/{}.xlsx'.format(filename), index=False)
     if filetype == 'csv':    
         df.to_csv('output/{}.csv'.format(filename), index=False)
+
+
 
 @main.command()
 @click.option('--filename', default='default', help='specify the filename for \

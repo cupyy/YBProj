@@ -3,13 +3,23 @@ from lazy import lazy
 from collections import OrderedDict
 
 class SiteMap(Base):
+    '''
+    web page object for https://tw.buy.yahoo.com/help/helper.asp?p=sitemap&hpp=sitemap
+    used to get all category ids (i.e https://tw.buy.yahoo.com/?z=7) and corresponding
+    sub category ids (i.e https://tw.buy.yahoo.com/?sub=10)
+    '''
     def __init__(self, **kwargs):
         if 'sub_url' not in kwargs:
             kwargs['sub_url'] = 'help/helper.asp?p=sitemap&hpp=sitemap'
         super().__init__(**kwargs)
+        ########################################################################
+        # key to identify category id or sub category id
+        ########################################################################
         self.cat_query_key = kwargs.get('cat_query_key', 'z')
         self.sub_query_key = kwargs.get('sub_query_key', 'sub')
-
+        ########################################################################
+        # various id/class used to scrape content from site map
+        ########################################################################
         self.sitemap_id = kwargs.get('sitemap_id', 'cl-sitemap')
         self.zone_class = kwargs.get('zone_class', 'zone')
         self.zone_tag = kwargs.get('zone_tag', 'li')
@@ -34,6 +44,9 @@ class SiteMap(Base):
 
     @lazy
     def mapping(self):
+        '''
+        return category id => sub category ids lookup table
+        '''
         rs = OrderedDict()
         for zone in self.zones:
             info = self.get_zone_info(zone)
