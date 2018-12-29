@@ -43,7 +43,7 @@ directory to save crawled result
 #### lib
 directory for python lib used for yb.py
 ### Example
-'''
+```
 python yb.py --help
 Usage: yb.py [OPTIONS] COMMAND [ARGS]...
 
@@ -55,4 +55,4 @@ Commands:
   crawl
   query
   show_category_mapping
-'''
+```
