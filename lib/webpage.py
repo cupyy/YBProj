@@ -80,12 +80,15 @@ class WebPage():
                 self.url, 
                 **params
             )
-        except ProxyError as e:
-            print('Proxy Error: {}'.format( e.__class__.__name__))
-            print('retry without proxy ...')
-            self.connect()
-        except Exception as e:
-            #print('connection failed: {}'.format( e.__class__.__name__))
+#         except ProxyError as e:
+#             print('Proxy Error: {}'.format( e.__class__.__name__))
+#             print('retry without proxy ...')
+#             self.connect()
+        except requests.exceptions.RequestException as e:
+            print('connection failed: {} {}'.format( 
+                e.__class__.__name__, 
+                self.url)
+            )
             return e
 
         return response
@@ -102,8 +105,14 @@ class WebPage():
         
 
     @lazy
-    def html(self) :
-        return self.res.text if type(self.res) is not str else self.res
+    def html(self):
+        if isinstance(self.res, requests.models.Response) and \
+                self.res.status_code == 200:
+            return self.res.text
+
+        return ''
+
+
 
 
     @lazy
