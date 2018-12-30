@@ -53,7 +53,7 @@ class WebPage():
     def __init__(self, **kwargs):
         url = kwargs.get('url', None)
         self.timeout=kwargs.get('timeout', 3)
-        self.retries=kwargs.get('retries', 3)
+        self.retries=kwargs.get('retries', 10)
         ########################################################################
         # TODO possible proxy support in the future.  Currently not stable
         ########################################################################

@@ -40,6 +40,8 @@ the operation is not stable
 ## Handling exception 
 https://www.peterbe.com/plog/best-practice-with-retries-with-requests
 implemented in lib/webpage.py
+currently when exception occured, the crawler will simply print the exception
+message and continue to crawl next url
 
 ## Usage (yb.py)
 ### python version
