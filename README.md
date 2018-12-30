@@ -56,6 +56,7 @@ Commands:
   query
   show_category_mapping
 ```
+use --help to get detail explaination
 ```
 python yb.py show_category_mapping
 OrderedDict([('7', ['10', '619', '31', '110', '462', '12', '740', '741', '552', '764', '446', '563', '722', '626', '738', '247', '609', '574', '648', '739', '661', '227']), ('42', ['554', '41', '655', '28
@@ -75,16 +76,84 @@ python yb.py crawl --help
 Usage: yb.py crawl [OPTIONS]
 
 Options:
-  --cat_id TEXT          Crawl Yahoo Buy with specified category id.  if not
-                         specified, it will crawl all category ids
-  --filename TEXT        specify the filename to save crawled result.  if not
+  --cat_id TEXT          Crawl Yahoo Buy with specified category id.  If not
+                         specified, it will crawl all category and sub
+                         category ids
+  --filename TEXT        Specify the filename to save crawled result.  If not
                          specified, name "default" will be used
   --filetype [xlsx|csv]  specify file type to save.  default to xlsx if not
                          specified
   -h, --help             Show this message and exit.
 ```
-To simply crawl all category, simply type:
+To simply crawl all category, just type:
 ```
 python yb.py crawl
 ```
-result will be saved in output/default.xlsx 
+```
+process category 7 hot item
+process sub category 10 hot item
+process sub category 619 hot item
+process sub category 31 hot item
+process sub category 110 hot item
+process sub category 462 hot item
+```
+result will be caved to output/default.xlsx
+
+or crawl category id = 45
+```
+python yb.py crawl --filename cat_45 --cat_id 45
+process category 45 hot item
+process sub category 718 hot item
+process sub category 720 hot item
+writting result to output/cat_45.xlsx
+```
+result will be saved in output/cat_45.xlsx 
+```
+python yb.py query --help
+Usage: yb.py query [OPTIONS]
+
+Options:
+  --filename TEXT        Specify the filename for crawled result used for
+                         query.  If not specified, name "default" will be used
+  --filetype [xlsx|csv]  Specify file type to query from.  Default to xlsx if
+                         not specified
+  --min_price INTEGER    Minimun price to consider, Default to 0
+  --max_price TEXT       Maxmun price to consider, Default to no limit
+  --stats_view           Show aggregated result grouped by category instead of
+                         raw data.  Default to show product count and average
+                         price for each category
+  -h, --help             Show this message and exit.
+```
+query command to perform simple query and aggregation operation
+```
+python yb.py query --min_price 1000 --max_price 10000
+```
+will return all raw record with price between 1000 ~ 10000
+```
+python yb.py query --stats_view
+    category_id           category  product_name_count    price_  39   1634.615385
+1             3  電腦資訊 / 週邊 / Apple                  98  10546.397959
+2             4  手機 / 平板 / 耳機 / 穿戴                  46   7087.521739
+3   65  11526.246154
+4                    159   2237.352201
+6             8     精品 / 手錶 / 珠寶飾品                 125  17905.208000
+7             9      女鞋 / 男鞋 / 運動鞋                 179   3424.279330
+8            10       收納 / 家具 / 床墊                  43   5251.837209
+9            11         健身戶外 / 行李箱                  28   3488.285714
+10           15       量販 / 食品 / 醫療                  64    435.015625
+11           32                內睡衣                 128   1303.546875
+12           36       廚具 / 衛浴 / 寵物                  23   1676.478261
+13           37                票券區                  10   3245.600000
+14           38       婦幼 / 童裝 / 玩具                  85   1381.517647
+15           39         機車 / 汽機車用品                   1   3990.000000
+16           40        運動服飾 / 運動用品                  22   1787.590909
+17           41       女包 / 男包 / 皮夾                 151   3609.251656
+18           42             牛仔休閒服飾                 154   2557.175325
+19           43       居家 / 寢具 / 家飾                  55   6841.345455
+20           45               禮物專區                   3   2932.666667
+21           46     相機 / 攝影機 / 望遠鏡                  15   9341.866667
+22           47     電競 / 電玩 / 授權週邊                  27  19991.777778
+23           48     智能家居 / 監控 / 辦公                  19   2041.210526
+```
+will return aggregated result (total product count and average price)  grouped by category
+
