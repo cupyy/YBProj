@@ -32,6 +32,15 @@ many best selling products.  That might violate the meaning of best selling
 products (if too many best selling products, the what do best selling products
 mean?)
 
+## Using proxy to avoid blocking
+possible solution https://www.scrapehero.com/how-to-rotate-proxies-and-ip-addresses-using-python-3/#5-things-to-keep-in-mind-while-using-proxies-and-rotating-ip-addresses6
+implemented the code in lib/webpage.py but currently turn it off because
+the operation is not stable
+
+## Handling exception 
+https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+implemented in lib/webpage.py
+
 ## Usage (yb.py)
 ### python version
 3.6
