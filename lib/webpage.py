@@ -1,13 +1,29 @@
 from lazy import lazy
 from bs4 import BeautifulSoup as BS
-import requests
+import requests, itertools
+from lxml.html import fromstring
 #import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+from requests.exceptions import ProxyError
+
+# https://www.scrapehero.com/how-to-rotate-proxies-and-ip-addresses-using-python-3/#5-things-to-keep-in-mind-while-using-proxies-and-rotating-ip-addresses6
+def get_proxies():
+    url = 'https://free-proxy-list.net/'
+    response = requests.get(url)
+    parser = fromstring(response.text)
+    proxies = set()
+    for i in parser.xpath('//tbody/tr')[:10]:
+        if i.xpath('.//td[7][contains(text(),"yes")]'):
+            #Grabbing IP and corresponding PORT
+            proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
+            proxies.add(proxy)
+    return proxies
 
 
 # https://dev.to/ssbozy/python-requests-with-retries-4p03
-# exception handle
+# https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+# network connection handle with retry
 def requests_retry_session(
     retries=10,
     backoff_factor=0.3,
@@ -36,33 +52,51 @@ class WebPage():
     '''
     def __init__(self, **kwargs):
         url = kwargs.get('url', None)
+        self.timeout=kwargs.get('timeout', 3)
+        self.retries=kwargs.get('retries', 3)
+        ########################################################################
+        # TODO possible proxy support in the future.  Currently not stable
+        ########################################################################
+        self.use_proxy=kwargs.get('use_proxy', False)
+        ########################################################################
         self.url = encode_str(url)
         self.requests = requests
 
+    @lazy
+    def proxy_pool(self):
+        return itertools.cycle(get_proxies())
 
-    def connect(self):
-#         try:
-#             return self.requests.get(self.url)
-#         except Exception as e:
-#             return e
+
+    def connect(self, proxy=None):
+        params = {
+            'timeout': self.timeout, 
+        }
+        if proxy is not None:
+            params['proxies'] = { 'http': proxy, 'https': proxy }
+            print ( 'using proxy: {}'.format(proxy))
+            
         try:
-            response = requests_retry_session().get(self.url)
-        except Exception as x:
-            print('connection failed: {} retrying...'.format( x.__class__.__name__))
-#         else: 
-#             #print('retry success', response.status_code)
-        finally:
-            pass
+            response = requests_retry_session(retries=self.retries).get(
+                self.url, 
+                **params
+            )
+        except ProxyError as e:
+            print('Proxy Error: {}'.format( e.__class__.__name__))
+            print('retry without proxy ...')
+            self.connect()
+        except Exception as e:
+            #print('connection failed: {}'.format( e.__class__.__name__))
+            return e
 
         return response
 
 
-
-
-
     @lazy
     def res(self):
-        rs = self.connect()
+        if self.use_proxy:
+            rs = self.connect(proxy=next(self.proxy_pool))
+        else:    
+            rs = self.connect()
         #return None if type(rs) is str else rs
         return rs
         
@@ -71,11 +105,8 @@ class WebPage():
     def html(self) :
         return self.res.text if type(self.res) is not str else self.res
 
+
     @lazy
     def sp(self):
         return BS(self.html, 'html5lib')
-
-
-
-
 

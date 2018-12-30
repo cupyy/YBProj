@@ -1,7 +1,7 @@
 import click
 import pandas as pd
 from lib.yahoobuy import YahooBuy
-
+from lib import dfutil
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -14,25 +14,16 @@ def main():
 
 
 @main.command()
-#@click.option('--all', is_flag=True, help='sync all')
 def show_category_mapping():
     rs = []
     mapping = yb.mapping
     print(mapping)
-#     for cat_id, sub_ids in mapping.items():
-#         for sub_id in sub_ids:
-#             rs.append({
-#                 'category_id': cat_id,
-#                 'sub_category_id': sub_id
-#             })
-# 
-#     print(pd.DataFrame(rs))
 
 @main.command()
 @click.option('--cat_id', default=None, help='Crawl Yahoo Buy with specified \
-category id.  if not specified, it will crawl all category ids')
-@click.option('--filename', default='default', help='specify the filename to save \
-crawled result.  if not specified, name "default" will be used')
+category id.  If not specified, it will crawl all category and sub category ids')
+@click.option('--filename', default='default', help='Specify the filename to save \
+crawled result.  If not specified, name "default" will be used')
 @click.option('--filetype', default='xlsx', type=click.Choice(['xlsx', 'csv']), 
     help='specify file type to save.  default to xlsx if not specified') 
 
@@ -51,14 +42,18 @@ def crawl(cat_id, filename, filetype):
 
 
 @main.command()
-@click.option('--filename', default='default', help='specify the filename for \
-crawled result used for query if not specified, name "default" will be used')
+@click.option('--filename', default='default', help='Specify the filename for \
+crawled result used for query.  If not specified, name "default" will be used')
 @click.option('--filetype', default='xlsx', type=click.Choice(['xlsx', 'csv']), 
-    help='specify file type to query from.  default to xlsx if not specified') 
+    help='Specify file type to query from.  Default to xlsx if not specified') 
 
-@click.option('--min_price', default=0, help='minimun price to show, default to 0')
-@click.option('--max_price', default=None, help='maxmun price to show, default to no limit')
-def query(filename, filetype, min_price, max_price):
+@click.option('--min_price', default=0, help='Minimun price to consider, Default to 0')
+@click.option('--max_price', default=None, help='Maxmun price to consider, Default to no limit')
+@click.option('--stats_view', is_flag=True, help='Show aggregated result grouped \
+by category instead of raw data.  Default to show product count and average price \
+for each category')
+
+def query(filename, filetype, min_price, max_price, stats_view):
     if max_price is None:
         max_price = float('Inf')
     else:
@@ -71,6 +66,9 @@ def query(filename, filetype, min_price, max_price):
 
     df = df[df.price >= min_price]    
     df = df[df.price <= max_price]    
+    if stats_view:
+        df = dfutil.get_groupby_stats(df, ['category_id', 'category'], agg={'product_name':['count'], 'price':['mean']})
+
     print(df)
 
 if __name__ == '__main__':
